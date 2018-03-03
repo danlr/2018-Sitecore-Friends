@@ -39,14 +39,14 @@ namespace Hackathon.XEditor.Web.Controllers
             HttpPostedFileBase avatar = HttpContext.Request.Files["AvatarFile"];
 
             byte[] avatarBytes = null;
-            if (avatar != null)
+            if (avatar != null && avatar.ContentLength > 0)
             {
                 MemoryStream target = new MemoryStream();
                 avatar.InputStream.CopyTo(target);
                 avatarBytes = target.ToArray();
             }
 
-            var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email, avatarBytes)).Result;
+            var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.MiddleName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email, avatarBytes)).Result;
             return Json(result);
         }
     }

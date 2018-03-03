@@ -196,6 +196,7 @@
         public async Task<bool> UpdateContactInformation(
             Guid contactId,
             string firstName,
+            string middleName,
             string lastName,
             string title,
             string jobTitle,
@@ -233,6 +234,7 @@
                     }
 
                     personal.FirstName = firstName;
+                    personal.MiddleName = middleName;
                     personal.LastName = lastName;
                     personal.Title = title;
                     personal.JobTitle = jobTitle;
