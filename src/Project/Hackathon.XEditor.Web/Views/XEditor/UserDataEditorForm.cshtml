@@ -1,0 +1,91 @@
+﻿@model Hackathon.XEditor.Api.Dto.ContactDto
+
+<style>
+    form {
+        width: 800px;
+        margin: 20px 10px
+    }
+
+    form div + div {
+        margin-top: 1em;
+    }
+
+    label {
+        /* To make sure that all labels have the same size and are properly aligned */
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+
+    input {
+        width: 300px;
+        box-sizing: border-box;
+        border: 1px solid #999;
+    }
+
+    input:focus, textarea:focus {
+        /* To give a little highlight on active elements */
+        border-color: #000;
+    }
+
+    #submit-data {
+        margin-left: 150px;
+        margin-top: 10px;
+    }
+</style>
+
+<form action="" method="post" id="editForm">
+    <input type="hidden" name="ContactId" value="@Model.ContactId"/>
+    <div class="form-user-editor">
+        <div class="control-form-user-editor">
+            <label for="user-first-name">First Name:</label>
+            <input type="text" id="user-first-name" name="PersonalInformation.FirstName" value="@Model.PersonalInformation.FirstName" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-middle-name">Middle Name:</label>
+            <input type="text" id="user-middle-name" name="PersonalInformation.MiddleName" value="@Model.PersonalInformation.MiddleName" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-last-name">Last Name:</label>
+            <input type="text" id="user-last-name" name="PersonalInformation.LastName" value="@Model.PersonalInformation.LastName" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-email">Email:</label>
+            <input type="email" id="user-email" name="Email" value="@Model.Email" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-phone">Phone:</label>
+            <input type="text" id="user-phone" name="Phone" value="@Model.Phone" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-gender">Gender:</label>
+            <input type="text" id="user-gender" name="PersonalInformation.Gender" value="@Model.PersonalInformation.Gender" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-job-title">Job Title:</label>
+            <input type="text" id="user-job-title" name="PersonalInformation.JobTitle" value="@Model.PersonalInformation.JobTitle" />
+        </div>
+        <div class="control-form-user-editor">
+            <label for="user-title">Title:</label>
+            <input type="text" id="user-title" name="PersonalInformation.Title" value="@Model.PersonalInformation.Title" />
+        </div>
+    </div>
+    <input type="submit" id="submit-data" value="Save Profile" class="btn"/>
+</form>
+<script>
+    jQuery("#editForm").submit(function(e) {
+        jQuery.ajax({
+            type: "POST",
+            url: '/api/sitecore/XEditor/EditorForm',
+            data: jQuery("#editForm").serialize(),
+            success: function(data)
+            {
+                if (data) {
+                    window.location = window.location;
+                }
+            }
+        });
+
+        e.preventDefault();
+    });
+</script>

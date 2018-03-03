@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
 
     using Dto;
@@ -38,12 +37,50 @@
                         return null;
                     }
 
-                    result.ContactId = contact.Id.ToString();
+                    result.ContactId = contact.Id ?? Guid.Empty;
                     result.PersonalInformation = new PersonalDto(contact.Personal());
                     result.Email = contact.Emails()?.PreferredEmail?.SmtpAddress;
                     result.Phone = contact.PhoneNumbers()?.PreferredPhoneNumber?.Number;
                     result.Avatar = contact.Avatar() != null && contact.Avatar().Picture != null;
                     return result;
+                }
+                catch (XdbExecutionException ex)
+                {
+                }
+            }
+
+            return null;
+        }
+
+        public async Task<IReadOnlyDictionary<string, Facet>> GetContactFacets(Guid contactId)
+        {
+            using (XConnectClient client = GetClient())
+            {
+                try
+                {
+                    var availableFacetDefinitions = client.Model.Facets.Where(f => f.Target == EntityType.Contact);
+
+                    List<string> availableKeys = new List<string>();
+                    foreach (var defenition in availableFacetDefinitions)
+                    {
+                        availableKeys.Add(defenition.Name);
+                    }
+
+                    ContactReference reference = new ContactReference(contactId);
+                    var contactTask = client.GetAsync<Contact>(
+                        reference,
+                        new ContactExpandOptions(availableKeys.ToArray())
+                    );
+
+                    var contact = await contactTask;
+
+                    if (contact == null)
+                    {
+                        return null;
+                    }
+
+                    return contact.Facets;
+
                 }
                 catch (XdbExecutionException ex)
                 {
@@ -130,6 +167,7 @@
             string firstName,
             string lastName,
             string title,
+            string jobTitle,
             string phone,
             string email)
         {
@@ -164,6 +202,7 @@
                     personal.FirstName = firstName;
                     personal.LastName = lastName;
                     personal.Title = title;
+                    personal.JobTitle = jobTitle;
 
                     var phoneNumbers = contact.PhoneNumbers();
                     var preferredPhoneNumber = new PhoneNumber(string.Empty, phone);
@@ -203,71 +242,6 @@
                     return false;
                 }
             }
-        }
-
-        public List<Type> GetAllFacets()
-        {
-            var facetTypes = new List<Type>();
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()
-                .Where(i => !i.FullName.StartsWith("Microsoft") && !i.FullName.StartsWith("System")))
-            {
-                try
-                {
-                    foreach (Type t in a.GetTypes())
-                    {
-                        if (!t.IsAbstract && t.IsSubclassOf(typeof(Facet)))
-                        {
-                            var constants = GetConstants(t);
-                            if (constants.Any(c => c.Name.Equals("DefaultFacetKey")))
-                            {
-                                facetTypes.Add(t);
-                            }
-                        }
-                    }
-                }
-                catch (ReflectionTypeLoadException e)
-                {
-                }
-            }
-
-            return facetTypes;
-        }
-
-        public List<string> GetAllFacetKeys()
-        {
-            var facetKeys = new List<string>();
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()
-                .Where(i => !i.FullName.StartsWith("Microsoft") && !i.FullName.StartsWith("System")))
-            {
-                try
-                {
-                    foreach (Type t in a.GetTypes())
-                    {
-                        if (!t.IsAbstract && t.IsSubclassOf(typeof(Facet)))
-                        {
-                            var constants = GetConstants(t);
-                            var key = constants.FirstOrDefault(c => c.Name.Equals("DefaultFacetKey"));
-                            if (key != null)
-                            {
-                                facetKeys.Add(key.GetRawConstantValue().ToString());
-                            }
-                        }
-                    }
-                }
-                catch (ReflectionTypeLoadException e)
-                {
-                }
-            }
-
-            return facetKeys;
-        }
-
-        private List<FieldInfo> GetConstants(Type type)
-        {
-            FieldInfo[] fieldInfos = type.GetFields(BindingFlags.Public |
-                                                    BindingFlags.Static | BindingFlags.FlattenHierarchy);
-
-            return fieldInfos.Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
         }
 
         protected XConnectClient GetClient()
