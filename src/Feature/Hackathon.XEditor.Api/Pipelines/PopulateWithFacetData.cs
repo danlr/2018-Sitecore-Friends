@@ -18,49 +18,43 @@ namespace Hackathon.XEditor.Api.Pipelines
         public override void Process(ReportProcessorArgs args)
         {
             var xConnectService = new XconnectService();
-            var length = 0;
-            var facets = Task.Run(() => xConnectService.GetContactFacets(args.ReportParameters.ContactId)).Result;
-
-            var output = facets.Select(a => a.Value); 
-             var table = CreateDataTable(output, length); 
+            var facets = Task.Run(() => xConnectService.GetFacets(args.ReportParameters.ContactId)).Result;
+            var table = CreateDataTable(facets); 
             args.ResultSet.Data.Dataset[args.ReportParameters.ViewName] = table;
         }
 
-        public static DataTable CreateDataTable(IEnumerable<Sitecore.XConnect.Facet> list, int length)
+        public static DataTable CreateDataTable(IEnumerable<dynamic> list)
         {
-            //Type type = typeof(Sitecore.XConnect.Facet);
-            //var properties = type.GetProperties();
+            Type baseType = typeof(Sitecore.XConnect.Facet);
+            var skippedProperties = baseType.GetProperties().Select(x => x.Name).ToList();
 
             DataTable dataTable = new DataTable();
 
-            dataTable.Columns.Add("FieldName", "".GetType());
-            dataTable.Columns.Add("FieldValue", "".GetType());
-
-
-            //foreach (PropertyInfo info in properties.Where(x => !x.Name.Equals("XObject",StringComparison.OrdinalIgnoreCase)))
-            //{
-            //    dataTable.Columns.Add(new DataColumn(info.Name, Nullable.GetUnderlyingType(info.PropertyType) ?? info.PropertyType));
-            //}
+            dataTable.Columns.Add(new DataColumn("FacetName", "".GetType()));
+            dataTable.Columns.Add(new DataColumn("FieldName", "".GetType()));
+            dataTable.Columns.Add(new DataColumn("FieldValue", "".GetType()));
 
             foreach (var entity in list)
             {
-                Type type = typeof(Sitecore.XConnect.Facet);
+                Type type = entity.GetType();
                 var properties = type.GetProperties();
                 foreach (var p in properties)
                 {
-                   
-                    for (int i = 0; i < properties.Length; i++)
+                    object[] values = new object[3];
+
+                    values[0] = type.Name;
+                    values[1] = p.Name;
+                    var value = p.GetValue(entity) ?? "";
+                    values[2] = value;
+                    Type valueType = value.GetType();
+                    if (valueType.FullName != null)
                     {
-                       
-                        object[] values = new object[2];
-
-                        values[0] = properties[i].Name;
-                        values[1] = properties[i].GetValue(entity);
-                        if (properties[i].Name.Contains("XObject"))
-                            dataTable.Rows.Add(values);
+                        if (!valueType.FullName.StartsWith("System.Collections"))
+                            if (!skippedProperties.Contains(p.Name))
+                                dataTable.Rows.Add(values);
                     }
+                   
 
-                    
                 }
                
             }
