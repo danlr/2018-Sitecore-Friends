@@ -17,7 +17,6 @@ define(
 			var container = $facet.data('container');
 			var fieldName = $facet.data('field-name');
 			var value = $facet.find('.facet-value').val();
-			debugger;
 			$.ajax({
             type: "POST",
 			
