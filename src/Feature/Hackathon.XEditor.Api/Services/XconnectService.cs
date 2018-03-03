@@ -284,6 +284,7 @@ namespace Hackathon.XEditor.Api.Services
             string jobTitle,
             string phone,
             string email,
+            string gender,
             byte[] avatar = null)
         {
             using (XConnectClient client = GetClient())
@@ -320,6 +321,7 @@ namespace Hackathon.XEditor.Api.Services
                     personal.LastName = lastName;
                     personal.Title = title;
                     personal.JobTitle = jobTitle;
+                    personal.Gender = gender;
 
                     var phoneNumbers = contact.PhoneNumbers();
                     var preferredPhoneNumber = new PhoneNumber(string.Empty, phone);

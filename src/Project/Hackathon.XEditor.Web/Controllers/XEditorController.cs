@@ -46,7 +46,7 @@ namespace Hackathon.XEditor.Web.Controllers
                 avatarBytes = target.ToArray();
             }
 
-            var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.MiddleName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email, avatarBytes)).Result;
+            var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.MiddleName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email, model.PersonalInformation.Gender, avatarBytes)).Result;
             return Json(result);
         }
 
