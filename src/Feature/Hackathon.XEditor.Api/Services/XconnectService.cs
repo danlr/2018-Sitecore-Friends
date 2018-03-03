@@ -41,7 +41,11 @@
                     result.PersonalInformation = new PersonalDto(contact.Personal());
                     result.Email = contact.Emails()?.PreferredEmail?.SmtpAddress;
                     result.Phone = contact.PhoneNumbers()?.PreferredPhoneNumber?.Number;
-                    result.Avatar = contact.Avatar() != null && contact.Avatar().Picture != null;
+                    result.IsAvatar = contact.Avatar() != null && contact.Avatar().Picture != null;
+                    if (result.IsAvatar)
+                    {
+                        result.Avatar = contact.Avatar().Picture;
+                    }
                     return result;
                 }
                 catch (XdbExecutionException ex)
@@ -147,10 +151,10 @@
                     };
 
                     var preferredPhoneNumber = new PhoneNumber(string.Empty, phone);
-                    var phoneNumbers = new PhoneNumberList(preferredPhoneNumber, "Work");
+                    var phoneNumbers = new PhoneNumberList(preferredPhoneNumber, "Work phone");
 
                     var preferredEmail = new EmailAddress(email, true);
-                    var emails = new EmailAddressList(preferredEmail, "Work");
+                    var emails = new EmailAddressList(preferredEmail, "Work email");
 
                     client.AddContact(contact);
                     client.SetPhoneNumbers(contact, phoneNumbers);
@@ -221,7 +225,7 @@
 
                     if (phoneNumbers == null)
                     {
-                        phoneNumbers = new PhoneNumberList(preferredPhoneNumber, "Work");
+                        phoneNumbers = new PhoneNumberList(preferredPhoneNumber, "Work phone");
                     }
                     else
                     {
@@ -233,7 +237,7 @@
 
                     if (emails == null)
                     {
-                        emails = new EmailAddressList(preferredEmail, "Work");
+                        emails = new EmailAddressList(preferredEmail, "Work email");
                     }
                     else
                     {

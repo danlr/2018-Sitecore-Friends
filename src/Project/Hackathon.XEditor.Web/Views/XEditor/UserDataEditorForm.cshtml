@@ -32,42 +32,174 @@
         margin-left: 150px;
         margin-top: 10px;
     }
+    .form-user-editor .control-form-user-editor label {
+        display: block;
+        float: left;
+        width: 175px;
+        color: #707070;
+        clear: both;
+        font-weight: normal;
+        margin-top: 8px;
+        text-align: left;
+    }
+    .form-user-editor .control-form-user-editor input {
+        height: 36px;
+        padding: 8px 12px;
+        font-size: 12px;
+        line-height: 1.42857143;
+        color: #474747;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #cccccc;
+        border-radius: 2px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }  
+    .form-user-editor .control-form-user-editor input:focus {
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    }   
+    #editForm .btn {
+         background-image: -webkit-linear-gradient(top, #f0f0f0 0%, #d1d1d1 100%);
+         background-image: -o-linear-gradient(top, #f0f0f0 0%, #d1d1d1 100%);
+         background-image: linear-gradient(to bottom, #f0f0f0 0%, #d1d1d1 100%);
+         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff0f0f0', endColorstr='#ffd1d1d1', GradientType=0);
+         border-color: #cccccc;
+         background-image: -webkit-linear-gradient(top, #f0f0f0 0%, #d9d9d9 100%);
+         background-image: -o-linear-gradient(top, #f0f0f0 0%, #d9d9d9 100%);
+         background-image: linear-gradient(to bottom, #f0f0f0 0%, #d9d9d9 100%);
+         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff0f0f0', endColorstr='#ffd9d9d9', GradientType=0);
+         filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+         background-repeat: repeat-x;
+         -webkit-box-shadow: inset 0 1px #ffffff;
+         box-shadow: inset 0 1px #ffffff;
+         text-shadow: none;
+         border-color: #bdbdbd;
+         min-width: 80px;
+         height: 36px;
+         color: #474747;
+         background-color: #f0f0f0;
+         display: inline-block;
+         margin-bottom: 0;
+         font-weight: normal;
+         text-align: center;
+         vertical-align: middle;
+         cursor: pointer;
+         border: 1px solid transparent;
+         white-space: nowrap;
+         padding: 8px 12px;
+         font-size: 12px;
+         line-height: 1.42857143;
+         border-radius: 6px;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         user-select: none;
+         text-decoration: none;
+         text-shadow: none;
+         background-position: 0;
+         position: relative;
+         outline: none;
+        width: auto;
+        margin-left:175px;
+     }
+    #editForm .btn:active{
+        background-image: -webkit-linear-gradient(top, #d9d9d9 0%, #d9d9d9 100%);
+    background-image: -o-linear-gradient(top, #d9d9d9 0%, #d9d9d9 100%);
+    background-image: linear-gradient(to bottom, #d9d9d9 0%, #d9d9d9 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9d9d9', endColorstr='#ffd9d9d9', GradientType=0);
+    -webkit-box-shadow: inset 0 3px 3px #b0b0b0;
+    box-shadow: inset 0 3px 3px #b0b0b0;
+    background-image: none;
+    border-color: #bdbdbd;
+        background-color: #d1d1d1;
+        color: #474747;
+      
+
+    }
+    .form-user-editor .control-form-user-editor .avatar {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+        border: 15px solid transparent;
+
+
+    }
+    .form-user-editor .control-form-user-editor .avatar img {
+        width: 100%;
+
+    }
+    .form-user-editor .control-form-user-editor .avatar .upload-file{
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+
+    }
 </style>
 
 <form action="" method="post" id="editForm">
     <input type="hidden" name="ContactId" value="@Model.ContactId"/>
+   
     <div class="form-user-editor">
         <div class="control-form-user-editor">
+            <label for="user-avater">Avatar:</label>
+            <div class="avatar">
+                @if (Model.IsAvatar)
+                {
+                    <img src="data:image/png;base64,@System.Text.Encoding.Default.GetString(Model.Avatar)"/>
+                }
+                else
+                {
+                    <img src="/sitecore/api/ao/v1/contacts/@Model.ContactId.ToString("D")/image?w=170&h=170"/>
+                }
+          
+                 <input type='file' class="upload-file" name="Avatar"/> 
+            </div>
+        </div>
+        <div class="control-form-user-editor">
             <label for="user-first-name">First Name:</label>
-            <input type="text" id="user-first-name" name="PersonalInformation.FirstName" value="@Model.PersonalInformation.FirstName" />
+            <input type="text" id="user-first-name" name="PersonalInformation.FirstName" value="@Model.PersonalInformation.FirstName"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-middle-name">Middle Name:</label>
-            <input type="text" id="user-middle-name" name="PersonalInformation.MiddleName" value="@Model.PersonalInformation.MiddleName" />
+            <input type="text" id="user-middle-name" name="PersonalInformation.MiddleName" value="@Model.PersonalInformation.MiddleName"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-last-name">Last Name:</label>
-            <input type="text" id="user-last-name" name="PersonalInformation.LastName" value="@Model.PersonalInformation.LastName" />
+            <input type="text" id="user-last-name" name="PersonalInformation.LastName" value="@Model.PersonalInformation.LastName"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-email">Email:</label>
-            <input type="email" id="user-email" name="Email" value="@Model.Email" />
+            <input type="email" id="user-email" name="Email" value="@Model.Email"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-phone">Phone:</label>
-            <input type="text" id="user-phone" name="Phone" value="@Model.Phone" />
+            <input type="text" id="user-phone" name="Phone" value="@Model.Phone"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-gender">Gender:</label>
-            <input type="text" id="user-gender" name="PersonalInformation.Gender" value="@Model.PersonalInformation.Gender" />
+            <input type="text" id="user-gender" name="PersonalInformation.Gender" value="@Model.PersonalInformation.Gender"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-job-title">Job Title:</label>
-            <input type="text" id="user-job-title" name="PersonalInformation.JobTitle" value="@Model.PersonalInformation.JobTitle" />
+            <input type="text" id="user-job-title" name="PersonalInformation.JobTitle" value="@Model.PersonalInformation.JobTitle"/>
         </div>
         <div class="control-form-user-editor">
             <label for="user-title">Title:</label>
-            <input type="text" id="user-title" name="PersonalInformation.Title" value="@Model.PersonalInformation.Title" />
+            <input type="text" id="user-title" name="PersonalInformation.Title" value="@Model.PersonalInformation.Title"/>
         </div>
     </div>
     <input type="submit" id="submit-data" value="Save Profile" class="btn"/>

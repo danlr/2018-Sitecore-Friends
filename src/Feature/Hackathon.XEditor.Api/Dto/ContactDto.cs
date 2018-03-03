@@ -12,6 +12,8 @@
 
         public string Phone { get; set; }
 
-        public bool Avatar { get; set; }
+        public bool IsAvatar { get; set; }
+
+        public byte[] Avatar { get; set; }
     }
 }
