@@ -128,18 +128,38 @@
         public List<Type> GetAllFacets()
         {
             var facetTypes = new List<Type>();
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()
+                .Where(i => !i.FullName.StartsWith("Microsoft") && !i.FullName.StartsWith("System")))
             {
-                foreach (Type t in a.GetTypes())
+                try
                 {
-                    if (!t.IsAbstract && t.IsSubclassOf(typeof(Facet)))
+                    foreach (Type t in a.GetTypes())
                     {
-                        facetTypes.Add(t);
+                        if (!t.IsAbstract && t.IsSubclassOf(typeof(Facet)))
+                        {
+                            var constants = GetConstants(t);
+                            if (constants.Any(c => c.Name.Equals("DefaultFacetKey")))
+                            {
+                                facetTypes.Add(t);
+                            }
+                        }
                     }
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    
                 }
             }
 
             return facetTypes;
+        }
+
+        private List<FieldInfo> GetConstants(Type type)
+        {
+            FieldInfo[] fieldInfos = type.GetFields(BindingFlags.Public |
+                                                    BindingFlags.Static | BindingFlags.FlattenHierarchy);
+
+            return fieldInfos.Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToList();
         }
 
         protected XConnectClient GetClient()
