@@ -6,6 +6,7 @@ using Hackathon.XEditor.Api.Services;
 namespace Hackathon.XEditor.Web.Controllers
 {
     using System;
+    using System.IO;
     using System.Web.Mvc;
     
     public class XEditorController : Controller
@@ -35,7 +36,17 @@ namespace Hackathon.XEditor.Web.Controllers
         [HttpPost]
         public JsonResult EditorForm(ContactDto model)
         {
-            var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email)).Result;
+            HttpPostedFileBase avatar = HttpContext.Request.Files["AvatarFile"];
+
+            byte[] avatarBytes = null;
+            if (avatar != null)
+            {
+                MemoryStream target = new MemoryStream();
+                avatar.InputStream.CopyTo(target);
+                avatarBytes = target.ToArray();
+            }
+
+            var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email, avatarBytes)).Result;
             return Json(result);
         }
     }

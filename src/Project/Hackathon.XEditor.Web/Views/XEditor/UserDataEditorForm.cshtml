@@ -150,23 +150,15 @@
     }
 </style>
 
-<form action="" method="post" id="editForm">
+<form action="" method="post" id="editForm" enctype="multipart/form-data">
     <input type="hidden" name="ContactId" value="@Model.ContactId"/>
    
     <div class="form-user-editor">
         <div class="control-form-user-editor">
             <label for="user-avater">Avatar:</label>
             <div class="avatar">
-                @if (Model.IsAvatar)
-                {
-                    <img src="data:image/png;base64,@System.Text.Encoding.Default.GetString(Model.Avatar)"/>
-                }
-                else
-                {
-                    <img src="/sitecore/api/ao/v1/contacts/@Model.ContactId.ToString("D")/image?w=170&h=170"/>
-                }
-          
-                 <input type='file' class="upload-file" name="Avatar"/> 
+                <img src="/sitecore/api/ao/v1/contacts/@Model.ContactId.ToString("D")/image?w=170&h=170"/>
+                <input type='file' class="upload-file" name="AvatarFile"/> 
             </div>
         </div>
         <div class="control-form-user-editor">
@@ -202,16 +194,19 @@
             <input type="text" id="user-title" name="PersonalInformation.Title" value="@Model.PersonalInformation.Title"/>
         </div>
     </div>
-    <input type="submit" id="submit-data" value="Save Profile" class="btn"/>
+    <input type="submit" id="submit-data" value="Save" class="btn"/>
 </form>
 <script>
-    jQuery("#editForm").submit(function(e) {
+    jQuery("#editForm").submit(function (e) {
+        var formData = new FormData(this);
         jQuery.ajax({
             type: "POST",
             url: '/api/sitecore/XEditor/EditorForm',
-            data: jQuery("#editForm").serialize(),
-            success: function(data)
-            {
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
                 if (data) {
                     window.location = window.location;
                 }
