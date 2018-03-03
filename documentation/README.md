@@ -32,4 +32,4 @@ You will need some contacts in your xConnect to see the module in action. You ca
 ## Video
 
 
-[![Sitecore Hackathon Video Embedding Alt Text](sitecore-friends-2018.mp4 )](sitecore-friends-2018.mp4)
+[![Sitecore Hackathon Video](sitecore-friends-2018.mp4 )](sitecore-friends-2018.mp4?raw=true)
