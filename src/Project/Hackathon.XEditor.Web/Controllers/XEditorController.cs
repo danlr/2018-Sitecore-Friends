@@ -49,5 +49,14 @@ namespace Hackathon.XEditor.Web.Controllers
             var result = Task.Run(() => _xconnectService.UpdateContactInformation(model.ContactId, model.PersonalInformation.FirstName, model.PersonalInformation.MiddleName, model.PersonalInformation.LastName, model.PersonalInformation.Title, model.PersonalInformation.JobTitle, model.Phone, model.Email, avatarBytes)).Result;
             return Json(result);
         }
+
+        [HttpPost]
+        public JsonResult EditorFacet(FacetDto model)
+        {
+            model.ContactId = HttpUtility.ParseQueryString(Request.UrlReferrer.Query)[ContactIdParam];
+            var result = Task.Run(() => _xconnectService.UpdateContactFacet(model)).Result;
+            var message = result ? "Successfully saved" : "An error occured";
+            return Json(message);
+        }
     }
 }
