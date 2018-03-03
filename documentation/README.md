@@ -1,4 +1,4 @@
-# Documentation
+# Expirience Profile Editor. Documentation.
 ![Hackathon Logo](images/hackathon.png?raw=true "Hackathon Logo")
 ## Summary
 
@@ -16,7 +16,7 @@ Browsing experience profile to see contact custom facets will also be extremely 
 
 ## Installation
 
- - Install the package
+ - Install the package ![Package](/sc.package/XEditor-1.0.zip?raw=true "package")
  - Deploy demo facet to xConnect (/sc.package/xConnect)
 
 ## Usage
