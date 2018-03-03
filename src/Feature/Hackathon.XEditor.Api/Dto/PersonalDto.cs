@@ -4,6 +4,10 @@
 
     public class PersonalDto
     {
+        public PersonalDto()
+        {
+        }
+
         public PersonalDto(PersonalInformation p)
         {
             if (p == null)
