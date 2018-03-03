@@ -63,16 +63,7 @@ namespace Hackathon.XEditor.Api.Services
             return null;
         }
 
-        public async Task<IList<dynamic>> GetFacets(Guid contactId)
-        {
-            var result = new List<dynamic>();
-            var facets = await GetContactFacets(contactId);
-            foreach (var entry in facets)
-            {
-                result.Add(entry.Value);
-            }
-            return result;
-        }
+    
 
         public async Task<IReadOnlyDictionary<string, Facet>> GetContactFacets(Guid contactId)
         {

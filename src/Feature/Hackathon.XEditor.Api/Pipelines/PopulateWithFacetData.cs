@@ -40,7 +40,8 @@ namespace Hackathon.XEditor.Api.Pipelines
             dataTable.Columns.Add(new DataColumn("Type", "".GetType()));
             foreach (var entity in list)
             {
-                AddChildren(ref dataTable, entity.Key, entity.Value, 0);
+                if(entity.Key!="Avatar")
+                    AddChildren(ref dataTable, entity.Key, entity.Value, 0);
             }
 
             return dataTable;
