@@ -69,7 +69,7 @@ namespace Hackathon.XEditor.Api.Pipelines
                     if (!valueType.FullName.StartsWith("System.Collections"))
                         if (!IsDefaultProperty(p.Name))
                         {
-                            var path = typePath+ "$" + values[1]+"$"+ type.Name;
+                            var path = typePath+ "$" + values[1];
                             values[4] = typePath;
                             if (valueType.Namespace.StartsWith("System"))
                             {

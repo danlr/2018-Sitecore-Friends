@@ -142,9 +142,32 @@ namespace Hackathon.XEditor.Api.Services
                             {
                                 var property = type.GetProperty(facet.FieldName);
                                 if (property == null) return false;
-                                property.SetValue(f.Value, Convert.ChangeType(facet.Value, property.PropertyType), null);
+                                property.SetValue(f.Value, Convert.ChangeType(facet.Value, property.PropertyType),
+                                    null);
                             }
-                            
+                            else
+                            {
+                                var paths = facet.Container.Split(new[]{"$"}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                                PropertyInfo property;
+                                while (paths.Count > 0)
+                                {
+                                    var current = paths[0];
+                                    paths.RemoveAt(0);
+                                    property = type.GetProperty(current);
+                                    if (property != null)
+                                    {
+                                        var value = property.GetValue(f.Value);
+                                        type = property.PropertyType;
+                                        property = type.GetProperty(facet.FieldName);
+                                        if (property != null)
+                                        {
+                                            property.SetValue(value, Convert.ChangeType(facet.Value, property.PropertyType), null);
+                                        }
+
+                                    }
+                                }
+                              
+                            }
                             client.SetFacet<Facet>(contact,facet.FacetName, f.Value);
                             await client.SubmitAsync();
                             return true;
