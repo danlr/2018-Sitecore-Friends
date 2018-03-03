@@ -1,0 +1,58 @@
+{
+  "Name": "PetModel",
+  "Version": "1.0",
+  "References": [
+    {
+      "Name": "XConnect",
+      "Version": "1.0"
+    },
+    {
+      "Name": "Sitecore.XConnect.Collection.Model",
+      "Version": "9.0"
+    }
+  ],
+  "Types": {
+    "Hackathon.XEditor.Model.Contact.Facets.Pet": {
+      "Type": "Facet",
+      "BaseType": "Sitecore.XConnect.Facet",
+      "Annotations": [
+        {
+          "Type": "PIISensitiveAttribute"
+        }
+      ],
+      "ClrType": "Hackathon.XEditor.Model.Contact.Facets.Pet, Hackathon.XEditor.Model, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Properties": {
+        "Breed": {
+          "Type": "String"
+        },
+        "Name": {
+          "Type": "String"
+        },
+        "BirthDate": {
+          "Type": "DateTime"
+        },
+        "MimeType": {
+          "Type": "String"
+        },
+        "Picture": {
+          "Type": "Binary",
+          "Annotations": [
+            {
+              "Type": "DoNotIndexAttribute"
+            },
+            {
+              "Type": "PIISensitiveAttribute"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Facets": [
+    {
+      "Target": "Contact",
+      "Name": "PetInfo",
+      "Type": "Hackathon.XEditor.Model.Contact.Facets.Pet"
+    }
+  ]
+}
