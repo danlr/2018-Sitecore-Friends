@@ -1,8 +1,10 @@
 ﻿namespace Hackathon.XEditor.Api.Dto
 {
+    using System;
+
     public class ContactDto
     {
-        public string ContactId { get; set; }
+        public Guid ContactId { get; set; }
 
         public PersonalDto PersonalInformation { get; set; }
 

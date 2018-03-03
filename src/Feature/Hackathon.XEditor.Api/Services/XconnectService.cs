@@ -38,7 +38,7 @@
                         return null;
                     }
 
-                    result.ContactId = contact.Id.ToString();
+                    result.ContactId = contact.Id ?? Guid.Empty;
                     result.PersonalInformation = new PersonalDto(contact.Personal());
                     result.Email = contact.Emails()?.PreferredEmail?.SmtpAddress;
                     result.Phone = contact.PhoneNumbers()?.PreferredPhoneNumber?.Number;
@@ -130,6 +130,7 @@
             string firstName,
             string lastName,
             string title,
+            string jobTitle,
             string phone,
             string email)
         {
@@ -164,6 +165,7 @@
                     personal.FirstName = firstName;
                     personal.LastName = lastName;
                     personal.Title = title;
+                    personal.JobTitle = jobTitle;
 
                     var phoneNumbers = contact.PhoneNumbers();
                     var preferredPhoneNumber = new PhoneNumber(string.Empty, phone);
