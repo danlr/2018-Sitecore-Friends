@@ -185,7 +185,8 @@
             string title,
             string jobTitle,
             string phone,
-            string email)
+            string email,
+            byte[] avatar = null)
         {
             using (XConnectClient client = GetClient())
             {
@@ -198,7 +199,8 @@
                         new ContactExpandOptions(
                             PersonalInformation.DefaultFacetKey,
                             EmailAddressList.DefaultFacetKey,
-                            PhoneNumberList.DefaultFacetKey)
+                            PhoneNumberList.DefaultFacetKey,
+                            Avatar.DefaultFacetKey)
                     );
 
                     Contact contact = await contactTask;
@@ -244,6 +246,21 @@
                         emails.PreferredEmail = preferredEmail;
                     }
 
+                    if (avatar != null)
+                    {
+                        var avatarFacet = contact.Avatar();
+
+                        if (avatarFacet == null)
+                        {
+                            avatarFacet = new Avatar("image/jpeg", avatar);
+                        }
+                        else
+                        {
+                            avatarFacet.Picture = avatar;
+                        }
+
+                        client.SetAvatar(contact, avatarFacet);
+                    }
 
                     client.SetPhoneNumbers(contact, phoneNumbers);
                     client.SetPersonal(contact, personal);

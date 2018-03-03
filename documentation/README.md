@@ -24,6 +24,7 @@ Browsing experience profile to see contact custom facets will also be extremely 
 Once module is installed marketers can immediately see new components in Experience Profile app.
 
 ![Edit contact details form](images/EditContactForm.png?raw=true "Edit contact details form")
+![Edit contact details form](images/EditContactFormAfterEdit.png?raw=true "Edit contact details form")
 
 You will need some contacts in your xConnect to see the module in action. You can generate a couple of test contacts via special link http://[sitecore_url]/api/sitecore/ContactApi/AddTestData
 
