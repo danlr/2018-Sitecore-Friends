@@ -11,7 +11,9 @@ namespace Hackathon.XEditor.Model.Contact.Facets
         public const string DefaultFacetKey = "PetInfo";
 
         public string Breed { get; set; }
+
         public string Name { get; set; }
+
         public DateTime BirthDate { get; set; }
 
         public string MimeType { get; set; }

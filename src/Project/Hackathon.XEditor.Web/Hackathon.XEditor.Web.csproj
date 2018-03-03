@@ -52,6 +52,7 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.XConnect, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -89,6 +90,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Views\XEditor\UserDataEditorForm.cshtml" />
+    <Content Include="App_Config\Include\XConnect.Model\Hackathon.XEditor.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

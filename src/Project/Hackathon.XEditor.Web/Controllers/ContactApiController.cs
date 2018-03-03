@@ -21,18 +21,13 @@
             _xconnectService = xconnectService;
         }
 
-        public async Task<ActionResult> TestAdd()
+        public async Task<ActionResult> AddTestData()
         {
-            bool result = await _xconnectService.CreateContact(TestSource, Guid.NewGuid().ToString("D"),"First", "Last", "Mr", "", "test@sitecorehackathon.com");
+            bool result = await _xconnectService.CreateContact(TestSource, Guid.NewGuid().ToString("D"),"First1", "Last1", "Mr", "", "test1@sitecorehackathon.com");
+            result = await _xconnectService.CreateContact(TestSource, Guid.NewGuid().ToString("D"),"First2", "Last2", "Ms", "", "test2@sitecorehackathon.com");
+            result = await _xconnectService.CreateContact(TestSource, Guid.NewGuid().ToString("D"),"First3", "Last3", "", "01234 5678", "test3@sitecorehackathon.com");
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult TestReadFacets()
-        {
-            var facets = _xconnectService.GetAllFacetKeys();
-
-            return Json(facets, JsonRequestBehavior.AllowGet);
         }
     }
 }
