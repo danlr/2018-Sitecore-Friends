@@ -11,7 +11,7 @@
 
     public class XconnectService
     {
-        public async Task<object> ReadFacetsAsync(Guid contactId)
+        public async Task<ContactDto> ReadFacetsAsync(Guid contactId)
         {
             using (XConnectClient client = GetClient())
             {
@@ -24,7 +24,6 @@
                         new ContactExpandOptions(
                             PersonalInformation.DefaultFacetKey,
                             EmailAddressList.DefaultFacetKey,
-                            ContactBehaviorProfile.DefaultFacetKey,
                             PhoneNumberList.DefaultFacetKey,
                             Avatar.DefaultFacetKey)
                     );
@@ -49,6 +48,78 @@
             }
 
             return null;
+        }
+
+        public async Task<bool> CreateContact(
+            string source,
+            string identifier,
+            string firstName,
+            string lastName,
+            string title,
+            string phone,
+            string email)
+        {
+            using (XConnectClient client = GetClient())
+            {
+                try
+                {
+                    IdentifiedContactReference reference = new IdentifiedContactReference(source, identifier);
+
+                    var contactTask = client.GetAsync<Contact>(
+                        reference,
+                        new ContactExpandOptions(
+                            PersonalInformation.DefaultFacetKey,
+                            EmailAddressList.DefaultFacetKey,
+                            PhoneNumberList.DefaultFacetKey)
+                    );
+
+                    Contact existingContact = await contactTask;
+
+                    if (existingContact != null)
+                    {
+                        return false;
+                    }
+
+                    var contactIdentifier = new[]
+                    {
+                        new ContactIdentifier(source, identifier, ContactIdentifierType.Known)
+                    };
+
+                    Contact contact = new Contact(contactIdentifier);
+
+                    var personal = new PersonalInformation
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Title = title
+                    };
+
+                    var preferredPhoneNumber = new PhoneNumber(string.Empty, phone);
+                    var phoneNumbers = new PhoneNumberList(preferredPhoneNumber, "Work");
+
+                    var preferredEmail = new EmailAddress(email, true);
+                    var emails = new EmailAddressList(preferredEmail, "Work");
+
+                    client.AddContact(contact);
+                    client.SetPhoneNumbers(contact, phoneNumbers);
+                    client.SetPersonal(contact, personal);
+                    client.SetEmails(contact, emails);
+
+                    Interaction interaction = new Interaction(contact, InteractionInitiator.Brand, Guid.NewGuid(), "test");
+                    var ev = new PageViewEvent(DateTime.UtcNow, Guid.Parse("{11111111-1111-1111-1111-111111111111}"), 1, "en");
+                    interaction.Events.Add(ev);
+
+                    client.AddInteraction(interaction);
+
+                    await client.SubmitAsync();
+
+                    return true;
+                }
+                catch (XdbExecutionException ex)
+                {
+                    return false;
+                }
+            }
         }
 
         protected XConnectClient GetClient()
