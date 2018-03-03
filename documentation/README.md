@@ -1,5 +1,5 @@
 # Documentation
-
+![Hackathon Logo](images/hackathon.png?raw=true "Hackathon Logo")
 ## Summary
 
 **Category:** xConnect
@@ -19,20 +19,13 @@ Browsing experience profile to see contact custom facets will also be extremely 
  - Install the package
  - Deploy demo facet to xConnect (/sc.package/xConnect)
 
-## Configuration
-
-
 ## Usage
-
-You will need some contacts in your xConnect to see the module in action, you can generate a couple of test contacts via special link http://[sitecore_url]/api/sitecore/ContactApi/AddTestData
 
 Once module is installed marketers can immediately see new components in Experience Profile app.
 
-![Hackathon Logo](images/hackathon.png?raw=true "Hackathon Logo")
+![Edit contact details form](images/EditContactForm.png?raw=true "Edit contact details form")
 
-You can embed images of different formats too:
-
-![Deal With It](images/deal-with-it.gif?raw=true "Deal With It")
+You will need some contacts in your xConnect to see the module in action. You can generate a couple of test contacts via special link http://[sitecore_url]/api/sitecore/ContactApi/AddTestData
 
 ## Video
 
