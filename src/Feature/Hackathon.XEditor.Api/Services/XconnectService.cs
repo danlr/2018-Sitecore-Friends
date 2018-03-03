@@ -1,4 +1,8 @@
-﻿namespace Hackathon.XEditor.Api.Services
+﻿using System.ComponentModel;
+using System.Reflection;
+using JSNLog.Infrastructure;
+
+namespace Hackathon.XEditor.Api.Services
 {
     using System;
     using System.Collections.Generic;
@@ -136,7 +140,26 @@
                     }
 
                     var facets =  contact.Facets;
-                    return true;
+                    foreach (var f in facets)
+                    {
+                       var facetName = f.Key;
+
+                        if (facetName == facet.FacetName)
+                        {
+                            Type type= f.Value.GetType();
+                            if (string.IsNullOrEmpty(facet.Container))
+                            {
+                                var property = type.GetProperty(facet.FieldName);
+                                if (property == null) return false;
+                                property.SetValue(f.Value, Convert.ChangeType(facet.Value, property.PropertyType), null);
+                            }
+                            
+                            client.SetFacet<Facet>(contact,facet.FacetName, f.Value);
+                            await client.SubmitAsync();
+                            return true;
+                        }
+                    }
+                   
 
                 }
                 catch (XdbExecutionException ex)
@@ -146,6 +169,12 @@
 
             return false;
         }
+
+        public bool UpdateFieldValue(ref dynamic obj, FacetDto facet)
+        {
+
+            return false;
+        } 
 
         public async Task<bool> CreateContact(
             string source,

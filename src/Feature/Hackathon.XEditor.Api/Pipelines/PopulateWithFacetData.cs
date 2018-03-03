@@ -6,6 +6,7 @@ using Sitecore.Cintel.Reporting;
 using Sitecore.Cintel.Reporting.Processors;
 using System.Linq;
 using System.Threading.Tasks;
+using Sitecore.XConnect;
 
 namespace Hackathon.XEditor.Api.Pipelines
 {
@@ -22,12 +23,13 @@ namespace Hackathon.XEditor.Api.Pipelines
         public override void Process(ReportProcessorArgs args)
         {
             var xConnectService = new XconnectService();
-            var facets = Task.Run(() => xConnectService.GetFacets(args.ReportParameters.ContactId)).Result;
+            var facets = Task.Run(() => xConnectService.GetContactFacets(args.ReportParameters.ContactId)).Result;
+            
             var table = CreateDataTable(facets); 
             args.ResultSet.Data.Dataset[args.ReportParameters.ViewName] = table;
         }
 
-        public DataTable CreateDataTable(IEnumerable<dynamic> list)
+        public DataTable CreateDataTable(IReadOnlyDictionary<string,Facet> list)
         {
             DataTable dataTable = new DataTable();
 
@@ -38,13 +40,13 @@ namespace Hackathon.XEditor.Api.Pipelines
             dataTable.Columns.Add(new DataColumn("Type", "".GetType()));
             foreach (var entity in list)
             {
-                AddChildren(ref dataTable, entity,0);
+                AddChildren(ref dataTable, entity.Key, entity.Value, 0);
             }
 
             return dataTable;
         }
 
-        private void AddChildren(ref DataTable dataTable, dynamic obj, int depth, string typePath="")
+        private void AddChildren(ref DataTable dataTable,string contactFacetName, dynamic obj, int depth, string typePath="")
         {
             if (depth > maxDepth) return; 
             Type type = obj.GetType();
@@ -53,19 +55,20 @@ namespace Hackathon.XEditor.Api.Pipelines
             {
                 object[] values = new object[5];
 
-                values[0] = type.Name;
+                values[0] = contactFacetName;
                 values[1] = p.Name;
                 var value = p.GetValue(obj) ?? "";
                 values[2] = value;
                 values[3] = depth;
-              
+
+
                 Type valueType = value.GetType();
                 if (valueType.FullName != null)
                 {
                     if (!valueType.FullName.StartsWith("System.Collections"))
                         if (!IsDefaultProperty(p.Name))
                         {
-                            var path = typePath+ "$" + values[1];
+                            var path = typePath+ "$" + values[1]+"$"+ type.Name;
                             values[4] = typePath;
                             if (valueType.Namespace.StartsWith("System"))
                             {
@@ -75,7 +78,7 @@ namespace Hackathon.XEditor.Api.Pipelines
                             {
                                 values[2] = "$object$";
                                 dataTable.Rows.Add(values);
-                                AddChildren(ref dataTable, value, depth+1, path);
+                                AddChildren(ref dataTable, contactFacetName, value, depth+1, path);
                             }
                         }
                 }
