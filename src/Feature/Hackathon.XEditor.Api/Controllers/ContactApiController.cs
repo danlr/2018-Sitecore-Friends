@@ -30,7 +30,7 @@
 
         public ActionResult TestReadFacets()
         {
-            var facets = _xconnectService.GetAllFacets();
+            var facets = _xconnectService.GetAllFacetKeys();
 
             return Json(facets, JsonRequestBehavior.AllowGet);
         }

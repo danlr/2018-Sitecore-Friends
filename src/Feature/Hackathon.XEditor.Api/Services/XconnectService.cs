@@ -125,6 +125,86 @@
             }
         }
 
+        public async Task<bool> UpdateContactInformation(
+            Guid contactId,
+            string firstName,
+            string lastName,
+            string title,
+            string phone,
+            string email)
+        {
+            using (XConnectClient client = GetClient())
+            {
+                try
+                {
+                    ContactReference reference = new ContactReference(contactId);
+
+                    var contactTask = client.GetAsync<Contact>(
+                        reference,
+                        new ContactExpandOptions(
+                            PersonalInformation.DefaultFacetKey,
+                            EmailAddressList.DefaultFacetKey,
+                            PhoneNumberList.DefaultFacetKey)
+                    );
+
+                    Contact contact = await contactTask;
+
+                    if (contact == null)
+                    {
+                        return false;
+                    }
+
+                    var personal = contact.Personal();
+
+                    if (personal == null)
+                    {
+                        personal = new PersonalInformation();
+                    }
+
+                    personal.FirstName = firstName;
+                    personal.LastName = lastName;
+                    personal.Title = title;
+
+                    var phoneNumbers = contact.PhoneNumbers();
+                    var preferredPhoneNumber = new PhoneNumber(string.Empty, phone);
+
+                    if (phoneNumbers == null)
+                    {
+                        phoneNumbers = new PhoneNumberList(preferredPhoneNumber, "Work");
+                    }
+                    else
+                    {
+                        phoneNumbers.PreferredPhoneNumber = preferredPhoneNumber;
+                    }
+
+                    var emails = contact.Emails();
+                    var preferredEmail = new EmailAddress(email, true);
+
+                    if (emails == null)
+                    {
+                        emails = new EmailAddressList(preferredEmail, "Work");
+                    }
+                    else
+                    {
+                        emails.PreferredEmail = preferredEmail;
+                    }
+
+
+                    client.SetPhoneNumbers(contact, phoneNumbers);
+                    client.SetPersonal(contact, personal);
+                    client.SetEmails(contact, emails);
+
+                    await client.SubmitAsync();
+
+                    return true;
+                }
+                catch (XdbExecutionException ex)
+                {
+                    return false;
+                }
+            }
+        }
+
         public List<Type> GetAllFacets()
         {
             var facetTypes = new List<Type>();
@@ -147,11 +227,39 @@
                 }
                 catch (ReflectionTypeLoadException e)
                 {
-                    
                 }
             }
 
             return facetTypes;
+        }
+
+        public List<string> GetAllFacetKeys()
+        {
+            var facetKeys = new List<string>();
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies()
+                .Where(i => !i.FullName.StartsWith("Microsoft") && !i.FullName.StartsWith("System")))
+            {
+                try
+                {
+                    foreach (Type t in a.GetTypes())
+                    {
+                        if (!t.IsAbstract && t.IsSubclassOf(typeof(Facet)))
+                        {
+                            var constants = GetConstants(t);
+                            var key = constants.FirstOrDefault(c => c.Name.Equals("DefaultFacetKey"));
+                            if (key != null)
+                            {
+                                facetKeys.Add(key.GetRawConstantValue().ToString());
+                            }
+                        }
+                    }
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                }
+            }
+
+            return facetKeys;
         }
 
         private List<FieldInfo> GetConstants(Type type)
