@@ -8,7 +8,7 @@ namespace Hackathon.XEditor.Model.Contact.Facets
     [PIISensitive]
     public class Pet : Facet
     {
-        public const string DefaultFacetKey = "Pet";
+        public const string DefaultFacetKey = "PetInfo";
 
         public string Breed { get; set; }
 
