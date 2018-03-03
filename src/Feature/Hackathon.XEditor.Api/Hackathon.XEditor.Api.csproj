@@ -121,6 +121,9 @@
     <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Remotion.Linq.2.1.1\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.Cintel, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Sitecore.Cintel.NoReferences.9.0.171219\lib\NET462\Sitecore.Cintel.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.Framework.Conditions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Sitecore.Framework.Conditions.1.1.12\lib\net462\Sitecore.Framework.Conditions.dll</HintPath>
     </Reference>
@@ -227,6 +230,7 @@
   <ItemGroup>
     <Compile Include="Dto\ContactDto.cs" />
     <Compile Include="Dto\PersonalDto.cs" />
+    <Compile Include="Pipelines\PopulateWithFacetData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\XconnectService.cs" />
   </ItemGroup>
@@ -236,6 +240,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Foundation\Hackathon.XEditor.Model\Hackathon.XEditor.Model.csproj">
+      <Project>{c8e7eb2e-ca0f-4ea2-bb44-0c3fe13f1a1e}</Project>
+      <Name>Hackathon.XEditor.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
