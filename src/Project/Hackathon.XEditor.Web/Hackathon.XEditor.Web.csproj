@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="sitecore\shell\client\Applications\ExperienceProfile\Contact\Facet\FacetTab.js" />
     <Content Include="Views\XEditor\UserDataEditorForm.cshtml" />
     <Content Include="App_Config\Include\XConnect.Model\Hackathon.XEditor.config" />
     <None Include="Web.Debug.config">

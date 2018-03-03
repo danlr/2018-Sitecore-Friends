@@ -7,6 +7,8 @@
 
     using Dto;
 
+    using Model.Contact.Facets;
+
     using Sitecore.XConnect;
     using Sitecore.XConnect.Client;
     using Sitecore.XConnect.Collection.Model;
@@ -126,7 +128,8 @@
                         new ContactExpandOptions(
                             PersonalInformation.DefaultFacetKey,
                             EmailAddressList.DefaultFacetKey,
-                            PhoneNumberList.DefaultFacetKey)
+                            PhoneNumberList.DefaultFacetKey,
+                            Pet.DefaultFacetKey)
                     );
 
                     Contact existingContact = await contactTask;
@@ -156,6 +159,18 @@
                     var preferredEmail = new EmailAddress(email, true);
                     var emails = new EmailAddressList(preferredEmail, "Work email");
 
+                    var petFacet = contact.GetFacet<Pet>(Pet.DefaultFacetKey);
+
+                    if (petFacet == null)
+                    {
+                        petFacet = new Pet()
+                        {
+                            Breed = "cat",
+                            Name = "Kitty"
+                        };
+                    }
+
+                    client.SetFacet<Pet>(contact, petFacet);
                     client.AddContact(contact);
                     client.SetPhoneNumbers(contact, phoneNumbers);
                     client.SetPersonal(contact, personal);
