@@ -27,5 +27,12 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult TestReadFacets()
+        {
+            var facets = _xconnectService.GetAllFacets();
+
+            return Json(facets, JsonRequestBehavior.AllowGet);
+        }
     }
 }

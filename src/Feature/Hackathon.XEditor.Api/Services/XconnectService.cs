@@ -1,6 +1,9 @@
 ﻿namespace Hackathon.XEditor.Api.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using Dto;
@@ -11,7 +14,7 @@
 
     public class XconnectService
     {
-        public async Task<ContactDto> ReadFacetsAsync(Guid contactId)
+        public async Task<ContactDto> GetContact(Guid contactId)
         {
             using (XConnectClient client = GetClient())
             {
@@ -120,6 +123,23 @@
                     return false;
                 }
             }
+        }
+
+        public List<Type> GetAllFacets()
+        {
+            var facetTypes = new List<Type>();
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type t in a.GetTypes())
+                {
+                    if (!t.IsAbstract && t.IsSubclassOf(typeof(Facet)))
+                    {
+                        facetTypes.Add(t);
+                    }
+                }
+            }
+
+            return facetTypes;
         }
 
         protected XConnectClient GetClient()
