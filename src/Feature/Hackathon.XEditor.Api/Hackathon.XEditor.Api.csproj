@@ -230,6 +230,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dto\ContactDto.cs" />
+    <Compile Include="Dto\FacetDto.cs" />
     <Compile Include="Dto\PersonalDto.cs" />
     <Compile Include="Pipelines\PopulateWithFacetData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

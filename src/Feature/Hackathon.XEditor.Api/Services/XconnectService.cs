@@ -106,6 +106,45 @@
             return null;
         }
 
+        public async Task<bool> UpdateContactFacet(FacetDto facet)
+        {
+            using (XConnectClient client = GetClient())
+            {
+                try
+                {
+                    var availableFacetDefinitions = client.Model.Facets.Where(f => f.Target == EntityType.Contact);
+
+                    List<string> availableKeys = new List<string>();
+                    foreach (var defenition in availableFacetDefinitions)
+                    {
+                        availableKeys.Add(defenition.Name);
+                    }
+
+                    ContactReference reference = new ContactReference(Guid.Parse(facet.ContactId));
+                    var contactTask = client.GetAsync<Contact>(
+                        reference,
+                        new ContactExpandOptions(availableKeys.ToArray())
+                    );
+
+                    var contact = await contactTask;
+
+                    if (contact == null)
+                    {
+                        return false;
+                    }
+
+                    var facets =  contact.Facets;
+                    return true;
+
+                }
+                catch (XdbExecutionException ex)
+                {
+                }
+            }
+
+            return false;
+        }
+
         public async Task<bool> CreateContact(
             string source,
             string identifier,
