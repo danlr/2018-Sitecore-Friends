@@ -17,7 +17,7 @@ Browsing experience profile to see contact custom facets will also be extremely 
 ## Installation
 
  - Install the package ![Package](/sc.package/XEditor-1.0.zip?raw=true "package")
- - Deploy demo facet to xConnect (/sc.package/xConnect)
+ - Deploy demo facet to xConnect ![Files](/sc.package/xConnect "files")
 
 ## Usage
 
