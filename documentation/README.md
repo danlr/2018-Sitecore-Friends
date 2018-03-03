@@ -1,4 +1,4 @@
-# Documentation
+# Expirience Profile Editor. Documentation.
 ![Hackathon Logo](images/hackathon.png?raw=true "Hackathon Logo")
 ## Summary
 
@@ -16,8 +16,8 @@ Browsing experience profile to see contact custom facets will also be extremely 
 
 ## Installation
 
- - Install the package
- - Deploy demo facet to xConnect (/sc.package/xConnect)
+ - Install the package ![Package](/sc.package/XEditor-1.0.zip?raw=true "package")
+ - Deploy demo facet to xConnect ![Files](/sc.package/xConnect "files")
 
 ## Usage
 
@@ -31,6 +31,5 @@ You will need some contacts in your xConnect to see the module in action. You ca
 
 ## Video
 
-Please provide a video highlighing your Hackathon module submission and provide a link to the video. Either a [direct link](https://www.youtube.com/watch?v=EpNhxW4pNKk) to the video, upload it to this documentation folder or maybe upload it to Youtube...
 
-[![Sitecore Hackathon Video Embedding Alt Text](https://img.youtube.com/vi/EpNhxW4pNKk/0.jpg)](https://www.youtube.com/watch?v=EpNhxW4pNKk)
+[![Sitecore Hackathon Video](sitecore-friends-2018.mp4 )](sitecore-friends-2018.mp4?raw=true)
