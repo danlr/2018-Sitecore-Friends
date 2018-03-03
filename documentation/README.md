@@ -25,6 +25,7 @@ Once module is installed marketers can immediately see new components in Experie
 
 ![Edit contact details form](images/EditContactForm.png?raw=true "Edit contact details form")
 ![Edit contact details form](images/EditContactFormAfterEdit.png?raw=true "Edit contact details form")
+![Edit contact all facets form](images/EditAllFacetsForm.png?raw=true "Edit contact all facets form")
 
 You will need some contacts in your xConnect to see the module in action. You can generate a couple of test contacts via special link http://[sitecore_url]/api/sitecore/ContactApi/AddTestData
 
