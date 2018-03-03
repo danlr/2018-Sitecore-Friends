@@ -1,10 +1,10 @@
-﻿namespace Hackathon.XEditor.Api.Controllers
+﻿namespace Hackathon.XEditor.Web.Controllers
 {
     using System;
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
-    using Services;
+    using Api.Services;
 
     public class ContactApiController : Controller
     {
