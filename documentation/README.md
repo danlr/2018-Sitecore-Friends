@@ -1,4 +1,4 @@
-# Expirience Profile Editor. Documentation.
+# Experience Profile Editor. Documentation.
 ![Hackathon Logo](images/hackathon.png?raw=true "Hackathon Logo")
 ## Summary
 
